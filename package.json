@@ -1,0 +1,27 @@
+{
+   "author": "IBM",
+   "dependencies": {
+      "express": "3.4.8",
+      "express-namespace":"*",
+      "ibmconfig": "*",
+      "ibmdata": "*",
+      "ibmbaas": "*",
+      "ibmpush": "*"
+   },
+   "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-simple-mocha": "0.4.0",
+    "load-grunt-tasks": "~0.3.0",   
+    "time-grunt": "~0.2.9",
+    "chai": "*",
+    "mocha": "*",
+    "when": "*",
+    "request": "*",
+    "assert":"*"
+  },
+    "repository" : { 
+  },
+   "description": "Starts a server which listens for user modules invocation requests.",
+   "license": "IBM",
+   "main": "app.js"
+}
