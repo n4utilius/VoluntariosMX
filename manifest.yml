@@ -1,0 +1,13 @@
+applications:
+- services:
+  - n4otest:MAS
+  - n4otest:Push
+  - n4otest:MobileData
+  disk_quota: 1024M
+  host: n4otest
+  name: n4otest
+  command: node app.js
+  path: .
+  domain: ng.bluemix.net
+  instances: 1
+  memory: 128M
