@@ -29,8 +29,19 @@ user.signup = function(req, res){
 			
 }
 
-user.login = function(req, res){
-	
+user.login = function(passport){
+	return function(req, res, next) {
+	 	passport.authenticate('local', function(err, user, info) {
+	    	if (err) { return next(err); }
+	    	if (!user) { 
+	    		return res.send({ 'success': false, 'msg': 'email o password incorrecto'}); 
+	    	}
+	    	req.login(user, function(err) {
+	      		if (err) {  return res.send({ 'success': false, 'msg': err.message })}
+	      		return res.send({ 'success': true, 'msg': 'ok'}); 
+	    	})
+	  	})(req, res, next)
+	}
 }
 
 

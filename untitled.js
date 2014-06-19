@@ -14,26 +14,8 @@ var data = ibmdata.initializeService();
 
 //database config
 var mongoose = require('mongoose');
-
-if (process.env.VCAP_SERVICES) {
-   var env = JSON.parse(process.env.VCAP_SERVICES);
-   var mongo = env['mongodb-2.2'][0].credentials;
-} else {
-   var mongo = {
-      "username" : "n4otest",
-      "password" : "ds041248",
-      "url" : "mongodb://n4otest:12345@ds041248.mongolab.com:41248/ibm_a_traer"
-   }
-
-}
-
-console.log(process.env.VCAP_SERVICES)
-
-
-			
-var urldb = "mongodb://ced08b03-9e64-44cd-b1b4-2dcbd54746fe:aa69bbb9-ce41-4f2f-be40-377ec8ed07b5@23.246.199.110:10023/db"; //produccion
-var urldb = "mongodb://localhost/n4otest"; //local
-var urldb = "mongodb://n4otest:12345@ds041248.mongolab.com:41248/ibm_a_traer"; //dev
+var urldb = "mongodb://localhost/n4otest";
+var urldb = "mongodb://n4otest:12345@ds041248.mongolab.com:41248/ibm_a_traer";
 mongoose.connect(urldb);
 
 // create an express app

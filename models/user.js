@@ -8,7 +8,8 @@ SALT_WORK_FACTOR = 10;
 
 var userSchema = mongoose.Schema({
     email: {
-	    type: String, // { type: String, match: /[a-z]/ }
+	    type: String, 
+      match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,  //validacion de correo
 	    required: true,
 	    index: { unique: true }
   	},

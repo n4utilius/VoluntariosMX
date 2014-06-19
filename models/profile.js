@@ -4,13 +4,13 @@ var mongoose = require('mongoose')
    ,Schema = mongoose.Schema
 
 var profileSchema = mongoose.Schema({
-    name: String, 
+    user_id: { type: Schema.ObjectId, required: true },
+    name: { type: String, required: true }, 
     alias: String, 
     cargo: String, // ***
     tel: String,
     bio: String,
     img: String,
-    user: Schema.ObjectId
 })
 
 module.exports = mongoose.model('Profile', profileSchema);

@@ -12,7 +12,7 @@ private.route_validate = function(route, callback){
 	for (i in params){
 		if ( route[params[i]] == undefined ) 
 			error = 'hace falta esfecificar ' + params[i];
-
+		/*
 		if ( params[i] == 'path' && route[params[i]] != undefined){
 			route.path = JSON.parse(route.path);
 			for (i in route['path']){
@@ -25,11 +25,13 @@ private.route_validate = function(route, callback){
 			}
 			
 		}
+		*/
 	}
 
 	if (error)
 		return callback([], error);
-		
+
+	route.path = { type : "LineString" , coordinates : route.path }
 	return callback(route, error);
 
 }
@@ -76,26 +78,36 @@ route.insert = function(req, res){
 	})
 }
 
-/* Pendiente, se tiene que hacer con rangos
-route.search = function(query){
-	var res = { 'success': false, 'msg'; '', 'data':[]}
+/* Pendiente, se tiene que hacer con rangos*/
+route.search = function(req, res){
+	coordinate = req.body.coordinate
+	start_time = req.body.start_time
+	end_time = req.body.end_time
+	
+	var result = { 'success': false, 'msg':'', 'data':[]}
 
-	private.query_validate(query ,function(query, error){
-		if (error)
-			res.msg = error
-			return res;
+	max = 1 / 6378; // max distance in km / earth's radius in km gives us radians
+	Route.find({ 
+		start_time: {"$gte": start_time, "$lt": end_time },
+		path: { 
+			$nearSphere:  coordinate || [ 2, 2 ],
+			$maxDistance : max,
+			spherical : true
+		}
+	}, function (error, data) {
+	        if (error) return res.send(error.message);
+	        else{
+	        	result.success = true
+	        	result.msg = 'ok'
+	        	result.data = data
+	        	res.send(result)
+	        }
+      	}
+    )
 
-		Route.find(query, function(data, error){
-			if (error) {
-				res.msg = error;
-				return res;
-			}
-			res = { 'success': true, 'msg':'ok', 'data' : data }
-			return res
-		})
-	})
+
+
 }
-*/
 
 route.search_by_user = function(req, res){
 	var user_id = req.params.user_id 
