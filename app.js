@@ -2,15 +2,12 @@ var express = require('express');
 var namespace = require('express-namespace');
 var ibmbaas = require('ibmbaas');
 var ibmdata = require('ibmdata');
-var ibmpush = require('ibmpush');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-	
+var path = require('path');
+
 var applicationId = 'e09ae593-2013-4a3e-adda-30d850c7025b';
 ibmbaas.initializeSDK(applicationId);
-
-var data = ibmdata.initializeService();
-//var push = ibmpush.initializeService();
 
 //database config
 var mongoose = require('mongoose');
@@ -18,40 +15,26 @@ var mongoose = require('mongoose');
 if (process.env.VCAP_SERVICES) {
    var env = JSON.parse(process.env.VCAP_SERVICES);
    var mongo = env['mongodb-2.2'][0].credentials;
+   console.log(process.env.VCAP_SERVICES)
 } else {
-   var mongo = {
-      "username" : "n4otest",
-      "password" : "ds041248",
-      "url" : "mongodb://n4otest:12345@ds041248.mongolab.com:41248/ibm_a_traer"
-   }
+   	var mongo = {
+   	   "username" : "n4otest",
+    	"password" : "ds041248",
+      	"url" : "mongodb://localhost/voluntariosMX" // 	urldb
+   	}
 
 }
-
-console.log(process.env.VCAP_SERVICES)
-
-
-			
-var urldb = "mongodb://ced08b03-9e64-44cd-b1b4-2dcbd54746fe:aa69bbb9-ce41-4f2f-be40-377ec8ed07b5@23.246.199.110:10023/db"; //produccion
-var urldb = "mongodb://localhost/n4otest"; //local
-var urldb = "mongodb://n4otest:12345@ds041248.mongolab.com:41248/ibm_a_traer"; //dev
-mongoose.connect(urldb);
+mongoose.connect(mongo.url);
 
 // create an express app
 var app = express();
 app.use(express.bodyParser());
 
-/* 
-	var methods = require('express/node_modules/methods');
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-	methods.forEach(function(method) {
-	  var orig;
-	  orig = app[method];
-	  return app[method] = function(path, handler) {
-	    console.log("patched method ", method, " ", path, " ", handler.toString());
-	    return orig.apply(this, arguments);
-	  };
-	});
- */
+app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 
 //add passports services
 require('./config/passport.js')(passport, LocalStrategy)
@@ -79,12 +62,11 @@ app.all('*', function(req, res, next){
 });
 
 // create resource URIs
-app.namespace(mbaasContextRoot, function() {
-	require('./routes/api.js')(app, passport)
-})
+require('./routes')(app, passport)
+require('./routes/api/v1.js')(app, passport)
 
 // host static files in public folder
-app.use(mbaasContextRoot+'/public',express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(config.port);
 console.log('Server started at port: '+config.port);
