@@ -1,0 +1,8 @@
+{
+	  "applicationId":"e09ae593-2013-4a3e-adda-30d850c7025b"
+	, "port":3000
+	, "mbaasContextRoot":"/mbaas/v1/apps/e09ae593-2013-4a3e-adda-30d850c7025b"
+	, "hostname":"mbaas"
+	, "vcapApplication":{}
+	, "vcapServices":{}
+}

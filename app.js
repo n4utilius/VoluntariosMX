@@ -24,6 +24,7 @@ if (process.env.VCAP_SERVICES) {
    	}
 
 }
+
 mongoose.connect(mongo.url);
 
 // create an express app
@@ -53,7 +54,7 @@ var config = require('ibmconfig');
 config.initializeSDK(applicationId);
 
 //get context root to deploy your application
-var mbaasContextRoot = config.mbaasContextRoot;
+//var mbaasContextRoot = config.mbaasContextRoot;
 
 // log all requests
 app.all('*', function(req, res, next){
